@@ -12,6 +12,7 @@ service satinfotech @(requires: 'authenticated-user') {
         TotalNetAmount,
         FiscalYear,
         CompanyCode,
+        LastChangeDateTime
         
     }
 
@@ -22,11 +23,14 @@ service satinfotech @(requires: 'authenticated-user') {
       BillingQuantityUnit,
       Plant,
       StorageLocation,
-      BillingDocument
+      BillingDocument,
+      NetAmount,
+      TransactionCurrency
     }
 
-    // Projection on local database schema
-    entity Billing as projection on db.Billing;
+   
+ entity Billing as projection on db.Billing;
+  action BillingFetch() returns Boolean;
 }
 
 // Enable draft support for Billing entity
@@ -39,7 +43,9 @@ annotate satinfotech.Billing with @(
         { Label: 'Sales Organization', Value: SalesOrganization },
         { Label: 'Billing Date', Value: BillingDocumentDate },
         { Label: 'Financial Year', Value: FiscalYear },
-        { Label: 'Company Code', Value: CompanyCode }
+        { Label: 'Company Code', Value: CompanyCode },
+        { Label: 'Last Changed Date Time ', Value: LastChangeDateTime }
+
     ],
     UI.FieldGroup #BillingInformation: {
         $Type: 'UI.FieldGroupType',
@@ -49,7 +55,8 @@ annotate satinfotech.Billing with @(
             { $Type: 'UI.DataField', Value: SalesOrganization },
             { $Type: 'UI.DataField', Value: BillingDocumentDate },
             { $Type: 'UI.DataField', Value: FiscalYear },
-            { $Type: 'UI.DataField', Value: CompanyCode }
+            { $Type: 'UI.DataField', Value: CompanyCode },
+            { $Type: 'UI.DataField', Value: LastChangeDateTime }
         ]
     },
     UI.Facets: [
@@ -63,7 +70,7 @@ annotate satinfotech.Billing with @(
             $Type: 'UI.ReferenceFacet',
             ID: 'BillingItemsFacet',
             Label: 'Billing Items',
-            Target: 'BillingItems/@UI.LineItem'  // Correctly referencing the `item` association
+            Target: 'BillingItems/@UI.LineItem'  // Correctly referencing the item association
         }
     ]
 );
@@ -76,6 +83,8 @@ annotate satinfotech.BillingItems with @(
         { Label: 'Billing Quantity', Value: BillingQuantityUnit },
         { Label: 'Plant', Value: Plant },
         { Label: 'Storage Location', Value: StorageLocation },
+        { Label: 'Net Amount', Value: NetAmount },
+        { Label: 'Transaction Currency', Value: TransactionCurrency },
     
     ],
     // UI.FieldGroup #BillingItemDetails: {

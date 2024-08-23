@@ -15,6 +15,8 @@ entity Billing : managed, cuid {
     FiscalYear: String(4);
     @title: 'Company Code'
     CompanyCode: String(4);
+    @title: 'LastChangeDateTime'
+     LastChangeDateTime: String(50);
     BillingItems : Composition of many BillingItems on BillingItems.BillingDocument= $self.BillingDocument;
 }
 
@@ -34,6 +36,10 @@ entity BillingItems : cuid, managed {
     Plant: String(4);
     @title: 'Storage Location'
     StorageLocation: String(4);
+    @title: 'Net Amount'
+    NetAmount: String(10);
+    @title: 'Transaction Currency'
+    TransactionCurrency: String(10);
 }
 
 
